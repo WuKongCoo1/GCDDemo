@@ -19,10 +19,10 @@
     
     NSLog(@"==========信号量控制并发数==========");
     
-    __block NSInteger concurrentCount = 0;
+    __block NSInteger concurrentCount = 1;
     
     //1.创建信号量
-    dispatch_semaphore_t semaphore  = dispatch_semaphore_create(5);
+    dispatch_semaphore_t semaphore  = dispatch_semaphore_create(4);
 
     //2.并发执行
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -31,7 +31,7 @@
             //等待信号 信号量-1，等待信号量大于0才会执行
             dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
             
-            NSLog(@"当前并发数 %li", (long)++concurrentCount);
+            NSLog(@"当前并发数 %li", (long)concurrentCount++);
             
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 [NSThread sleepForTimeInterval:arc4random_uniform(2.f)];
